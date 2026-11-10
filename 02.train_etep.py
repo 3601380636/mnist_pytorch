@@ -37,3 +37,22 @@ with torch.no_grad():
     new_loss=criterion(new_pred,y)
 
     print('更新后的损失:',new_loss.item())
+
+# 1. 保存训练后的权重和偏置
+torch.save(model.state_dict(), "linear_weights.pth")
+
+# 2. 新建一个结构相同的线性层
+restored = nn.Linear(3, 2)
+
+# 3. 从文件读出参数，装进新模型
+state = torch.load("linear_weights.pth", map_location="cpu", weights_only=True)
+restored.load_state_dict(state)
+
+# 4. 用同一个输入 x，比较两个模型的输出
+model.eval()
+restored.eval()
+
+with torch.no_grad():
+    before = model(x)
+    after = restored(x)
+    print("预测结果是否一致：", torch.allclose(before, after))  # True    
