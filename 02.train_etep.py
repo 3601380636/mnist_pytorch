@@ -53,6 +53,6 @@ model.eval()
 restored.eval()
 
 with torch.no_grad():
-    before = model(x)
-    after = restored(x)
+    before = model(x)#原模型
+    after = restored(x)#新建的模型
     print("预测结果是否一致：", torch.allclose(before, after))  # True    
